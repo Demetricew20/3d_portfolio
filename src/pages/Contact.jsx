@@ -3,12 +3,16 @@ import emailjs from "@emailjs/browser";
 import { Canvas } from "@react-three/fiber";
 import Fox from "../models/Fox";
 import Loader from "../components/Loader";
+import useAlert from "../hooks/useAlert";
+import Alert from "../components/Alert";
 
 const Contact = () => {
   const formRef = useRef(null);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [currentAnimation, setCurrentAnimation] = useState("idle");
+  const { alert, showAlert, hideAlert } = useAlert();
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -43,16 +47,26 @@ const Contact = () => {
       )
       .then(() => {
         setIsLoading(false);
-        //TODO : SHOW SUCCESS MESSAGE
-        //TODO : HIDE ALERT
+
+        showAlert({
+          show: true,
+          text: "Message sent successfully!",
+          type: "success",
+        });
 
         setTimeout(() => {
+          hideAlert();
           setCurrentAnimation("idle");
           setForm({ name: "", email: "", message: "" });
         }, 3000);
       })
       .catch((error) => {
         setIsLoading(false);
+        showAlert({
+          show: true,
+          text: "An Error has occurred.",
+          type: "danger",
+        });
         setCurrentAnimation("idle");
         console.log(error);
         //todo: show error message
@@ -61,6 +75,7 @@ const Contact = () => {
 
   return (
     <section className="relative flex lg:flex-row flex-col max-container">
+      {alert.show &&  <Alert {...alert} />}
       <div className="flex-1 min-w-[50%] flex flex-col">
         <h1 className="head-text">Get in Touch</h1>
 
@@ -126,19 +141,23 @@ const Contact = () => {
         </form>
       </div>
 
-      <div className="lg:w1/2 w-full lg:h-auto md:h-[550px] h-[100px]"></div>
-      <Canvas camera={{ position: [0, 0, 5], fov: 75, near: 0.1, far: 1000 }}>
-        <directionalLight intensity={2.5} position={(0, 0, 1)} />
-        <ambientLight intensity={0.5} />
-        <Suspense fallback={<Loader />}>
-          <Fox
-            currentAnimation={currentAnimation}
-            position={[0.5, 0.35, 0]}
-            rotation={[12.6, -0.6, 0]}
-            scale={[0.75, 0.75, 0.5]}
-          />
-        </Suspense>
-      </Canvas>
+      <div className="lg:w1/2 w-full lg:h-auto md:h-[550px] h-[350px]">
+        <Canvas
+          id="foxCanvas"
+          camera={{ position: [0, 0, 5], fov: 75, near: 0.1, far: 1000 }}
+        >
+          <directionalLight intensity={2.5} position={(0, 0, 1)} />
+          <ambientLight intensity={0.5} />
+          <Suspense fallback={<Loader />}>
+            <Fox
+              currentAnimation={currentAnimation}
+              position={[0.75, 0.35, 0]}
+              rotation={[12.6, -0.6, 0]}
+              scale={[0.5, 0.5, 0.5]}
+            />
+          </Suspense>
+        </Canvas>
+      </div>
     </section>
   );
 };

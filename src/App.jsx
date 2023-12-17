@@ -1,14 +1,12 @@
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import {Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Home, About, Projects, Contact } from "./pages";
 
-import {Home, About, Projects, Contact } from './pages';
-
-import Navbar from './components/Navbar';
-
+import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
-    <main className="bg-slate-300/20">
+    <main className="bg-slate-300/20 lg:h-screen">
       <Router>
         <Navbar />
         <Routes>
@@ -19,9 +17,7 @@ const App = () => {
         </Routes>
       </Router>
     </main>
-  )
-}
+  );
+};
 
-
-
-export default App
+export default App;
