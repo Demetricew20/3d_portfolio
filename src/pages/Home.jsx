@@ -34,7 +34,7 @@ const Home = () => {
       screenPosition = [0, -1.5, 0];
     } else {
       screenScale = [3, 3, 3];
-      screenPosition = [0, -4, 4];
+      screenPosition = [-3, -4, -3];
     }
 
     return [screenScale, screenPosition];
@@ -80,8 +80,8 @@ const Home = () => {
           />
 
           <Plane
-            planeScale={planeScale}
-            planePosition={planePosition}
+            position={planePosition}
+            scale={planeScale}
             isRotating={isRotating}
             rotation={[0, 20, 0]}
           />
